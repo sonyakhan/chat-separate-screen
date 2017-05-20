@@ -15,6 +15,12 @@
     $scope.join = function() {
       nickname = $scope.name;
       $localStorage.nickname = nickname;
+
+      // hook up user that just joined
+      socket.emit('join', {
+        nickname: nickname;
+      });
+
       // routes to main page after function is triggered
       $location.path('/main');
     };

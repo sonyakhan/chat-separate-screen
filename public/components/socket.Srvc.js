@@ -9,6 +9,7 @@
 
   function socket($rootScope) {
     var socket = io.connect();
+    
     // Socket 'on' and 'emit' methods here
     return {
       on: on,
