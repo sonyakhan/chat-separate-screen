@@ -18,11 +18,12 @@
 
       // hook up user that just joined
       socket.emit('join', {
-        nickname: nickname;
+        nickname: nickname
       });
 
       // routes to main page after function is triggered
       $location.path('/main');
     };
+
   }
 })();

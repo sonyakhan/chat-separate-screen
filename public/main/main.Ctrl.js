@@ -8,21 +8,35 @@
   MainCtrl.$inject = ['$scope', '$localStorage', 'socket', 'lodash'];
 
   function MainCtrl($scope, $localStorage, socket, lodash) {
+      $scope.message = '';
+      $scope.messages = [];
+      $scope.users = [];
 
-    $scope.users = [];
-    $scope.likes = [];
+      // nickname passed from join page, to $localStorage, to this ctrl now
+      $scope.mynickname = $localStorage.nickname;
+      var nickname = $scope.mynickname;
+      // want to retrieve the users with custom emit method called get-users
+      socket.emit('get-users');
 
-    // nickname passed from join page, to $localStorage, to this ctrl now
-    $scope.myNickname = $localStorage.nickname;
-
-    var nickname = $scope.myNickname;
-    // we want to retrieve the users with custom emit method called get-users
-    socket.emit('get-users');
-    socket.on('all-users', function(data){
-      console.log(data);
-      $scope.users = data.filter(function(item){
-        return item.nickname !== nickname;
+      socket.on('all-users', function(data) {
+          console.log(data);
+          $scope.users = data.filter(function(item){
+              return item.nickname !== nickname;
+          });
       });
-    });
-  };
+
+      socket.on('message-received', function(data) {
+        $scope.messages.push(data);
+      });
+
+      $scope.sendMessage = function(data) {
+          var newMessage = {
+            message: $scope.message,
+            from: $scope.mynickname
+        };
+        socket.emit('send-message', newMessage);
+          $scope.message = '';
+          //$scope.messages.push(newMessage);
+    };
+  }
 })();
