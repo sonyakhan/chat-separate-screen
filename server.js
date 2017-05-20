@@ -37,6 +37,11 @@ io.on('connection', function(socket) {
 
   });
 
+  // gets the users and emits them
+  socket.on('get-users', function() {
+    socket.emit('all-users', users);
+  });
+
 });
 
 // set port to 3000
